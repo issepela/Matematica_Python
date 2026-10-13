@@ -6,9 +6,9 @@ L'IDEA (spiegata semplice):
 In questa finestra ci sono due tipi di personaggi che si muovono a caso:
 
     - i CONIGLI (pallini blu)  -> le "prede"
-    - le LEPRI   (pallini rossi) -> i "predatori"
+    - le volpi   (pallini rossi) -> i "predatori"
 
-Nota simpatica: nella realtà le lepri non mangiano i conigli! Qui le
+Nota simpatica: nella realtà le volpi non mangiano i conigli! Qui le
 usiamo solo come "personaggio B" della nostra storia, un po' come in
 una favola. Quello che conta è la REGOLA che li fa interagire:
 
@@ -17,30 +17,30 @@ una favola. Quello che conta è la REGOLA che li fa interagire:
     - se una LEPRE incontra un CONIGLIO, puo' mangiarlo
       (i conigli diminuiscono, ma la lepre si sfama);
     - se una lepre ha appena mangiato, puo' fare un cucciolo di lepre
-      (le lepri aumentano);
-    - ogni tanto una lepre muore di fame (le lepri diminuiscono).
+      (le volpi aumentano);
+    - ogni tanto una lepre muore di fame (le volpi diminuiscono).
 
 Non abbiamo scritto nessuna formula! Eppure, guardando il grafico in
-basso, vedrete che i conigli e le lepri crescono e calano a ondate,
-uno di seguito all'altro: tanti conigli -> le lepri trovano cibo e
-aumentano -> troppe lepri mangiano troppi conigli -> i conigli calano
--> le lepri restano senza cibo e calano -> pochi predatori -> i conigli
+basso, vedrete che i conigli e le volpi crescono e calano a ondate,
+uno di seguito all'altro: tanti conigli -> le volpi trovano cibo e
+aumentano -> troppe volpi mangiano troppi conigli -> i conigli calano
+-> le volpi restano senza cibo e calano -> pochi predatori -> i conigli
 possono aumentare di nuovo -> e così via.
 
 Questo comportamento "a onde" è esattamente quello che succede nel
 modello matematico di Lotka-Volterra, che nel prossimo file
 scriveremo usando le vere equazioni:
 
-    dR/dt = a*R - b*R*F        (R = conigli, F = lepri)
+    dR/dt = a*R - b*R*F        (R = conigli, F = volpi)
     dF/dt = c*R*F - d*F
 
 I quattro cursori a destra (a, b, c, d) sono proprio i quattro
 parametri di quelle equazioni:
 
     a -> quanto facilmente i conigli si riproducono
-    b -> quanto sono efficaci le lepri a cacciare
-    c -> quanto le lepri si riproducono quando mangiano
-    d -> quanto velocemente le lepri muoiono di fame
+    b -> quanto sono efficaci le volpi a cacciare
+    c -> quanto le volpi si riproducono quando mangiano
+    d -> quanto velocemente le volpi muoiono di fame
 
 Provate a spostare i cursori e osservate come cambia il ritmo delle
 "onde" nel grafico!
@@ -73,7 +73,7 @@ LARGHEZZA_FINESTRA = 1000
 ALTEZZA_FINESTRA = 650
 
 # Dividiamo la finestra in tre zone:
-#   - AREA_SIMULAZIONE: dove si muovono conigli e lepri (in alto a sinistra)
+#   - AREA_SIMULAZIONE: dove si muovono conigli e volpi (in alto a sinistra)
 #   - AREA_GRAFICO:     l'andamento delle popolazioni nel tempo (in basso)
 #   - AREA_PANNELLO:    i cursori dei 4 parametri (a destra)
 AREA_SIMULAZIONE = pygame.Rect(0, 0, 750, 450)
@@ -92,13 +92,13 @@ VERDE_PANNELLO = (245, 245, 250)
 # 2) PARAMETRI INIZIALI DEL MODELLO E DELLA SIMULAZIONE
 # ---------------------------------------------------------------
 N_CONIGLI_INIZIALE = 60
-N_LEPRI_INIZIALE = 10
+N_volpi_INIZIALE = 10
 
 CONIGLI_MASSIMI = 300   # limite per non rallentare troppo il programma
-LEPRI_MASSIME = 200
+volpi_MASSIME = 200
 
 CONIGLI_MINIMI = 2      # non facciamo mai estinguere del tutto le popolazioni
-LEPRI_MINIME = 2
+volpi_MINIME = 2
 
 RAGGIO_INCONTRO = 20    # distanza (in pixel) entro cui due personaggi "si incontrano"
 
@@ -206,24 +206,24 @@ class Slider:
 # ---------------------------------------------------------------
 # 5) LA "REGOLA" CHE FA EVOLVERE IL SISTEMA DI UN FOTOGRAMMA
 # ---------------------------------------------------------------
-def aggiorna_simulazione(conigli, lepri, a, b, c, d):
+def aggiorna_simulazione(conigli, volpi, a, b, c, d):
     for coniglio in conigli:
         coniglio.muovi()
-    for lepre in lepri:
+    for lepre in volpi:
         lepre.muovi()
 
-    # --- le lepri muoiono di fame con probabilità d (mai sotto il minimo) ---
-    sopravvissute = [lepre for lepre in lepri if random.random() >= d]
-    if len(sopravvissute) < LEPRI_MINIME and len(lepri) >= LEPRI_MINIME:
-        morte = [lepre for lepre in lepri if lepre not in sopravvissute]
-        sopravvissute.extend(morte[:LEPRI_MINIME - len(sopravvissute)])
-    lepri[:] = sopravvissute
+    # --- le volpi muoiono di fame con probabilità d (mai sotto il minimo) ---
+    sopravvissute = [lepre for lepre in volpi if random.random() >= d]
+    if len(sopravvissute) < volpi_MINIME and len(volpi) >= volpi_MINIME:
+        morte = [lepre for lepre in volpi if lepre not in sopravvissute]
+        sopravvissute.extend(morte[:volpi_MINIME - len(sopravvissute)])
+    volpi[:] = sopravvissute
 
     # --- una lepre che incontra un coniglio puo' mangiarlo (prob. b) ---
     # se ha appena mangiato, puo' anche riprodursi (prob. c)
     conigli_mangiati = set()
-    nuove_lepri = []
-    for lepre in lepri:
+    nuove_volpi = []
+    for lepre in volpi:
         for indice, coniglio in enumerate(conigli):
             if indice in conigli_mangiati:
                 continue
@@ -231,7 +231,7 @@ def aggiorna_simulazione(conigli, lepri, a, b, c, d):
                 if random.random() < b:
                     conigli_mangiati.add(indice)
                     if random.random() < c:
-                        nuove_lepri.append(Lepre(lepre.x, lepre.y))
+                        nuove_volpi.append(Lepre(lepre.x, lepre.y))
                 break  # una lepre mangia al massimo un coniglio per fotogramma
 
     if conigli_mangiati:
@@ -264,25 +264,25 @@ def aggiorna_simulazione(conigli, lepri, a, b, c, d):
     # aggiungiamo i nuovi nati, rispettando i limiti massimi
     if len(conigli) + len(nuovi_conigli) <= CONIGLI_MASSIMI:
         conigli.extend(nuovi_conigli)
-    if len(lepri) + len(nuove_lepri) <= LEPRI_MASSIME:
-        lepri.extend(nuove_lepri)
+    if len(volpi) + len(nuove_volpi) <= volpi_MASSIME:
+        volpi.extend(nuove_volpi)
 
 
 # ---------------------------------------------------------------
 # 6) DISEGNO DEL GRAFICO "POPOLAZIONE NEL TEMPO"
 # ---------------------------------------------------------------
-def disegna_grafico(schermo, storia_conigli, storia_lepri, font):
+def disegna_grafico(schermo, storia_conigli, storia_volpi, font):
     pygame.draw.rect(schermo, BIANCO, AREA_GRAFICO)
     pygame.draw.rect(schermo, GRIGIO_SCURO, AREA_GRAFICO, 2)
 
-    titolo = font.render("Numero di conigli (blu) e lepri (rosso) nel tempo", True, NERO)
+    titolo = font.render("Numero di conigli (blu) e volpi (rosso) nel tempo", True, NERO)
     schermo.blit(titolo, (AREA_GRAFICO.x + 10, AREA_GRAFICO.y + 6))
 
     area = pygame.Rect(AREA_GRAFICO.x + 10, AREA_GRAFICO.y + 30,
                         AREA_GRAFICO.width - 20, AREA_GRAFICO.height - 65)
     pygame.draw.rect(schermo, GRIGIO_CHIARO, area)
 
-    massimo = max(list(storia_conigli) + list(storia_lepri) + [10])  # evita di dividere per zero
+    massimo = max(list(storia_conigli) + list(storia_volpi) + [10])  # evita di dividere per zero
 
     def disegna_linea(storia, colore):
         if len(storia) < 2:
@@ -296,7 +296,7 @@ def disegna_grafico(schermo, storia_conigli, storia_lepri, font):
         pygame.draw.lines(schermo, colore, False, punti, 2)
 
     disegna_linea(storia_conigli, BLU_CONIGLIO)
-    disegna_linea(storia_lepri, ROSSO_LEPRE)
+    disegna_linea(storia_volpi, ROSSO_LEPRE)
 
     etichetta_x = font.render("Tempo →", True, NERO)
     schermo.blit(etichetta_x, (area.right - etichetta_x.get_width(), area.bottom + 8))
@@ -306,8 +306,8 @@ def disegna_grafico(schermo, storia_conigli, storia_lepri, font):
     schermo.blit(etichetta_y, (AREA_GRAFICO.x + 8, area.y))
 
     n_conigli = storia_conigli[-1] if storia_conigli else 0
-    n_lepri = storia_lepri[-1] if storia_lepri else 0
-    testo_valori = font.render(f"Conigli: {n_conigli}       Lepri: {n_lepri}", True, NERO)
+    n_volpi = storia_volpi[-1] if storia_volpi else 0
+    testo_valori = font.render(f"Conigli: {n_conigli}       volpi: {n_volpi}", True, NERO)
     schermo.blit(testo_valori, (AREA_GRAFICO.x + 10, AREA_GRAFICO.bottom - 25))
 
 
@@ -320,18 +320,18 @@ def crea_popolazione_iniziale():
                   random.uniform(AREA_SIMULAZIONE.top + 20, AREA_SIMULAZIONE.bottom - 20))
         for _ in range(N_CONIGLI_INIZIALE)
     ]
-    lepri = [
+    volpi = [
         Lepre(random.uniform(AREA_SIMULAZIONE.left + 20, AREA_SIMULAZIONE.right - 20),
                random.uniform(AREA_SIMULAZIONE.top + 20, AREA_SIMULAZIONE.bottom - 20))
-        for _ in range(N_LEPRI_INIZIALE)
+        for _ in range(N_volpi_INIZIALE)
     ]
-    return conigli, lepri
+    return conigli, volpi
 
 
 def main():
     pygame.init()
     schermo = pygame.display.set_mode((LARGHEZZA_FINESTRA, ALTEZZA_FINESTRA))
-    pygame.display.set_caption("Conigli e lepri - un modello preda-predatore")
+    pygame.display.set_caption("Conigli e volpi - un modello preda-predatore")
     orologio = pygame.time.Clock()
 
     font = pygame.font.SysFont(None, 20)
@@ -342,13 +342,13 @@ def main():
     larghezza_slider = AREA_PANNELLO.width - 40
     slider_a = Slider(x_pannello, 100, larghezza_slider, 0.0, 0.10, 0.03, "a (crescita conigli)")
     slider_b = Slider(x_pannello, 190, larghezza_slider, 0.0, 1.00, 0.21, "b (predazione)")
-    slider_c = Slider(x_pannello, 280, larghezza_slider, 0.0, 1.00, 0.27, "c (crescita lepri)")
-    slider_d = Slider(x_pannello, 370, larghezza_slider, 0.0, 0.02, 0.009, "d (mortalità lepri)")
+    slider_c = Slider(x_pannello, 280, larghezza_slider, 0.0, 1.00, 0.27, "c (crescita volpi)")
+    slider_d = Slider(x_pannello, 370, larghezza_slider, 0.0, 0.02, 0.009, "d (mortalità volpi)")
     sliders = [slider_a, slider_b, slider_c, slider_d]
 
-    conigli, lepri = crea_popolazione_iniziale()
+    conigli, volpi = crea_popolazione_iniziale()
     storia_conigli = deque(maxlen=400)
-    storia_lepri = deque(maxlen=400)
+    storia_volpi = deque(maxlen=400)
     contatore_fotogrammi = 0
     in_pausa = False
 
@@ -365,21 +365,21 @@ def main():
                 elif evento.key == pygame.K_SPACE:
                     in_pausa = not in_pausa
                 elif evento.key == pygame.K_r:
-                    conigli, lepri = crea_popolazione_iniziale()
+                    conigli, volpi = crea_popolazione_iniziale()
                     storia_conigli.clear()
-                    storia_lepri.clear()
+                    storia_volpi.clear()
                     contatore_fotogrammi = 0
                     in_pausa = False
             for slider in sliders:
                 slider.gestisci_evento(evento)
 
         if not in_pausa:
-            aggiorna_simulazione(conigli, lepri, slider_a.valore, slider_b.valore,
+            aggiorna_simulazione(conigli, volpi, slider_a.valore, slider_b.valore,
                                  slider_c.valore, slider_d.valore)
             contatore_fotogrammi += 1
             if contatore_fotogrammi % 3 == 0:  # campioniamo la storia ogni 3 fotogrammi
                 storia_conigli.append(len(conigli))
-                storia_lepri.append(len(lepri))
+                storia_volpi.append(len(volpi))
 
         # --- disegno di tutta la finestra ---
         schermo.fill(GRIGIO_CHIARO)
@@ -387,7 +387,7 @@ def main():
         pygame.draw.rect(schermo, BIANCO, AREA_SIMULAZIONE)
         for coniglio in conigli:
             coniglio.disegna(schermo)
-        for lepre in lepri:
+        for lepre in volpi:
             lepre.disegna(schermo)
         pygame.draw.rect(schermo, GRIGIO_SCURO, AREA_SIMULAZIONE, 2)
 
@@ -395,7 +395,7 @@ def main():
             testo_pausa = font_titolo.render("IN PAUSA (premi SPAZIO per riprendere)", True, NERO)
             schermo.blit(testo_pausa, (AREA_SIMULAZIONE.x + 15, AREA_SIMULAZIONE.y + 10))
 
-        disegna_grafico(schermo, storia_conigli, storia_lepri, font)
+        disegna_grafico(schermo, storia_conigli, storia_volpi, font)
 
         pygame.draw.rect(schermo, VERDE_PANNELLO, AREA_PANNELLO)
         pygame.draw.line(schermo, GRIGIO_SCURO, (AREA_PANNELLO.x, 0),
