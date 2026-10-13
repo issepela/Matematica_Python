@@ -1,0 +1,62 @@
+### Il ciclo della natura: come funziona la simulazione
+
+Questo programma simula un piccolo ecosistema dove due popolazioni convivono seguendo poche regole individuali molto semplici.
+
+---
+
+#### 1. Le regole del gioco
+
+* **I Conigli (pallini blu) sono le Prede:** Vagano nello schermo. Se due conigli si incontrano, hanno una possibilità di fare un cucciolo.
+
+
+* **Le Lepri (pallini rossi) sono i Predatori:** Vagano nello schermo. Se una lepre incontra un coniglio, lo mangia. Se mangia, ottiene l'energia per fare un cucciolo. Se non trova cibo, rischia di morire di fame.
+
+
+
+---
+
+#### 2. Perché il grafico fa le "onde"?
+
+Guardando il grafico in basso nella finestra, si nota che le due linee (blu e rossa) non rimangono mai ferme, ma salgono e scendono a ritmo alternato:
+
+1. **Abbondanza:** Ci sono tanti conigli --> le lepri trovano facilmente da mangiare e nascono tantissimi cacciatori.
+
+
+2. **Troppa caccia:** Essendoci troppe lepri, i conigli vengono mangiati quasi tutti e la loro popolazione crolla.
+
+
+3. **Carestia:** Senza conigli da mangiare, le lepri iniziano a morire di fame e la loro popolazione crolla.
+
+
+4. **Rinascita:** Con pochissimi predatori in giro, i conigli sopravvissuti possono riprodursi in pace --> i conigli aumentano di nuovo e il ciclo riparte!
+
+
+
+---
+
+#### 3. I 4 "manettini" del pannello di controllo
+
+I cursori sulla destra permettono di modificare le leggi dell'ecosistema per vedere cosa succede:
+
+* **`a` (Fertilità Conigli):** Aumentandolo, i conigli fanno figli più velocemente.
+
+
+* **`b` (Efficienza della Caccia):** Aumentandolo, le lepri catturano i conigli con più facilità ad ogni incontro.
+
+
+* **`c` (Fertilità Lepri):** Aumentandolo, nascono più lepri ogni volta che viene mangiato un coniglio.
+
+
+* **`d` (Mortalità per Fame):** Aumentandolo, le lepri muoiono più rapidamente se non trovano da mangiare.
+
+
+
+---
+
+#### 4. Il concetto chiave da capire
+
+Nella realtà della matematica, questo fenomeno si descrive con un sistema di equazioni chiamato **Modello di Lotka-Volterra**. La cosa interessante dello script è che **non usa direttamente quelle formule matematiche**, ma dà semplicemente delle regole di comportamento ai singoli pallini. L'andamento "a onde" emerge spontaneamente dalle interazioni dell'ecosistema.
+
+
+
+Dal punto di vista matematico, il modello di Lotka-Volterra descrive semplicemente il bilancio tra nascite e morti di due popolazioni in un determinato istante di tempo.Prima di analizzare le formule, è utile chiarire il significato del simbolo $\frac{d}{dt}$: indica la velocità di variazione nel tempo (ovvero "quanti individui si aggiungono o si tolgono in un secondo"). Se il risultato è positivo la popolazione sta crescendo, se è negativo sta diminuendo, se è zero la popolazione rimane costante.1. L'equazione dei Conigli (Prede)$$\frac{dR}{dt} = \underbrace{a \cdot R}_{\text{Nascite}} - \underbrace{b \cdot R \cdot F}_{\text{Predazione}}$$$+ a \cdot R$ (Nascite naturali): I conigli crescono in modo proporzionale a quanti conigli ($R$) sono già presenti. Più conigli ci sono, più cuccioli nascono. Il parametro $a$ rappresenta il tasso di fertilità.$- b \cdot R \cdot F$ (Caccia): I conigli diminuiscono quando incontrano una lepre e vengono mangiati. Il parametro $b$ indica quanto sono abili le lepri a cacciare.2. L'equazione delle Lepri (Predatori)$$\frac{dF}{dt} = \underbrace{c \cdot R \cdot F}_{\text{Nuove lepri nate dal cibo}} - \underbrace{d \cdot F}_{\text{Morti naturali/fame}}$$$+ c \cdot R \cdot F$ (Crescita grazie al cibo): Le lepri si riproducono solo se trovano abbastanza cibo. Più conigli catturano, più la popolazione di lepri aumenta. Il parametro $c$ indica la capacità di trasformare il cibo in nuovi cuccioli.$- d \cdot F$ (Mortalità): In assenza di cibo sufficiente o per cause naturali, una parte delle lepri muore. Il parametro $d$ rappresenta il tasso di mortalità naturale.Il "segreto" matematico: il termine $R \cdot F$Per spiegare a ragazzi di questa età perché compare la moltiplicazione $R \cdot F$, si può usare l'analogia della probabilità di scontro:Immaginiamo una stanza in cui lepri e conigli si muovono a caso al buio. La frequenza con cui una lepre incrocia un coniglio dipende da quanti conigli ci sono moltiplicato per quante lepri ci sono. Se raddoppiano i conigli, gli incontri raddoppiano; se raddoppiano sia i conigli che lepri, gli incontri diventano quattro volte superiori.Il punto di equilibrio staticoSe si azzera la variazione ($\frac{dR}{dt} = 0$ e $\frac{dF}{dt} = 0$), il sistema trova un momento di stabilità teorica in cui le nascite compensano esattamente le morti:Numero di lepri necessarie per stabilizzare i conigli: $F = \frac{a}{b}$Numero di conigli necessari per sfamare le lepri: $R = \frac{d}{c}$Quando la simulazione parte con numeri diversi da questo punto di equilibrio, il sistema inizia a oscillare attorno ad esso, generando le tipiche "onde" periodiche del grafico.
