@@ -16,14 +16,15 @@ X prede e Y predatori):
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 # ---------------------------------------------------------------
 # 1) PARAMETRI DEL MODELLO E DELLA SIMULAZIONE
 # ---------------------------------------------------------------
-a, b, c, d = 1.0, 0.10, 0.10, 1.0
+a, b, c, d = 1, 0.10, 0.10, 1
 
-X0_INIZIALE = 10.0   # conigli all'inizio
-Y0_INIZIALE = 12.0   # volpi all'inizio
+X0_INIZIALE = 50.0   # conigli all'inizio
+Y0_INIZIALE = 2.0   # volpi all'inizio
 
 POPOLAZIONE_MINIMA = 0.1   # evita numeri negativi o nulli per errori di calcolo
 
@@ -63,17 +64,26 @@ for _ in range(NUMERO_PASSI):
 # ---------------------------------------------------------------
 # 4) DISEGNIAMO I DUE GRAFICI CON MATPLOTLIB
 # ---------------------------------------------------------------
-figura, assi_tempo = plt.subplots(1, 1, figsize=(12, 5.5))
+figura, assi_tempo = plt.subplots(2, 1, figsize=(12, 5.5))
 figura.suptitle("Conigli e volpi - le equazioni di Lotka-Volterra (versione statica)", fontsize=13)
 
 
 # --- andamento nel tempo ---
-assi_tempo.plot(storia_tempo, storia_X, color="tab:blue", label="prede")
-assi_tempo.plot(storia_tempo, storia_Y, color="tab:red", label="predatori")
-assi_tempo.set_title("Prede e predatori nel tempo")
-assi_tempo.set_xlabel("Tempo")
-assi_tempo.set_ylabel("Popolazione")
-assi_tempo.legend(loc="upper right")
+assi_tempo[0].plot(storia_tempo, storia_X, color="tab:blue", label="prede")
+assi_tempo[0].plot(storia_tempo, storia_Y, color="tab:red", label="predatori")
+assi_tempo[0].set_title("Prede e predatori nel tempo")
+assi_tempo[0].set_xlabel("Tempo")
+assi_tempo[0].set_ylabel("Popolazione")
+assi_tempo[0].legend(loc="upper right")
+
+#assi_tempo[1].plot(storia_tempo, np.array(storia_X)/np.array(storia_Y), color="tab:green", label="rapporto prede/predatori")
+assi_tempo[1].plot(storia_tempo, np.divide(np.array(storia_X), np.array(storia_Y)), color="tab:green", label="rapporto prede/predatori")
+assi_tempo[1].set_title("Rapporto prede/predatori nel tempo")
+assi_tempo[1].set_xlabel("Tempo")
+assi_tempo[1].set_ylabel("Rapporto")
+assi_tempo[1].legend(loc="upper right") 
+
+
 
 plt.tight_layout()
 plt.show()
