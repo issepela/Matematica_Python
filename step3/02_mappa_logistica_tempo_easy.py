@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 # ---------------------------------------------------------------
 # 1) PARAMETRI INIZIALI
 # ---------------------------------------------------------------
-R = 5     # tasso di crescita
-X0_INIZIALE = 0.04    # popolazione iniziale (0 = vuoto, 1 = prato pieno)
+R = 1.2    # tasso di crescita
+X0_INIZIALE = 0.9   # popolazione iniziale (0 = vuoto, 1 = prato pieno)
 N_PASSI = 40          # quanti anni simuliamo
 
 
@@ -32,7 +32,9 @@ N_PASSI = 40          # quanti anni simuliamo
 valori = [X0_INIZIALE]
 X = X0_INIZIALE
 for i in range(N_PASSI):
-       
+        
+        X = R * X * (1 - X) 
+    
         valori.append(X)
 
 # ---------------------------------------------------------------
@@ -49,4 +51,5 @@ assi.set_xlim(-0.5, N_PASSI + 0.5)
 assi.set_ylim(0, 1)
 assi.grid(True, alpha=0.3)
 assi.plot(range(N_PASSI + 1), valori, marker="o")
+assi.axhline(1-1/R, color='red', linewidth=0.5)  # linea orizzontale a y=0
 plt.show()
