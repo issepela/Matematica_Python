@@ -93,8 +93,8 @@ assi_mappa = figura.add_axes((0.06, 0.30, 0.38, 0.60))
 assi_mappa.set_title("Parabola, bisettrice e pallino")
 assi_mappa.set_xlabel("Popolazione quest'anno (x)")
 assi_mappa.set_ylabel("Popolazione l'anno dopo")
-assi_mappa.set_xlim(0, 1)
-assi_mappa.set_ylim(0, 1)
+assi_mappa.set_xlim(-3, 3)
+assi_mappa.set_ylim(-3, 3)
 assi_mappa.set_aspect("equal")
 assi_mappa.grid(True, alpha=0.3)
 
@@ -106,10 +106,10 @@ assi_tempo.set_xlim(-0.5, N_PASSI + 0.5)
 assi_tempo.set_ylim(0, 1)
 assi_tempo.grid(True, alpha=0.3)
 
-x_curva = np.linspace(0, 1, 300)
+x_curva = np.linspace(-3, 3, 300)
 linea_parabola, = assi_mappa.plot(x_curva, logistica(x_curva, R_INIZIALE),
                                   color="tab:blue", linewidth=2, label="parabola: r*x*(1-x)")
-assi_mappa.plot([0, 1], [0, 1], color="black", linestyle="--", label="bisettrice: y = x")
+assi_mappa.plot([-3, 3], [-3, 3], color="black", linestyle="--", label="bisettrice: y = x")
 linea_ragnatela, = assi_mappa.plot([], [], color="gray", linewidth=0.8)
 punto_fisso, = assi_mappa.plot([], [], marker="o", color="black", markersize=10,
                                markerfacecolor="none", linestyle="", label="punto fisso")
@@ -118,7 +118,7 @@ assi_mappa.legend(loc="upper left", fontsize=8)
 
 linea_tempo, = assi_tempo.plot([], [], marker="o", color="tab:green")
 
-cursore_r = Slider(figura.add_axes((0.10, 0.17, 0.38, 0.03)), "r", 0.0, 4.0,
+cursore_r = Slider(figura.add_axes((0.10, 0.17, 0.38, 0.03)), "r", 0.0, 5.0,
                    valinit=R_INIZIALE, valstep=0.01)
 cursore_x0 = Slider(figura.add_axes((0.10, 0.10, 0.38, 0.03)), "x0", 0.01, 0.99,
                     valinit=X0_INIZIALE, valstep=0.01)
