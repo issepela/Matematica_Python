@@ -21,9 +21,9 @@ import matplotlib.pyplot as plt
 # ---------------------------------------------------------------
 # 1) PARAMETRI INIZIALI
 # ---------------------------------------------------------------
-R = 1.2    # tasso di crescita
+R = 3.89    # tasso di crescita
 X0_INIZIALE = 0.9   # popolazione iniziale (0 = vuoto, 1 = prato pieno)
-N_PASSI = 40          # quanti anni simuliamo
+N_PASSI = 80          # quanti anni simuliamo
 
 
 # ---------------------------------------------------------------
