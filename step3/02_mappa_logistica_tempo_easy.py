@@ -32,9 +32,7 @@ N_PASSI = 80          # quanti anni simuliamo
 valori = [X0_INIZIALE]
 X = X0_INIZIALE
 for i in range(N_PASSI):
-        
         X = R * X * (1 - X) 
-    
         valori.append(X)
 
 # ---------------------------------------------------------------
